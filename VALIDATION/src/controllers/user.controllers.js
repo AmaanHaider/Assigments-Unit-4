@@ -1,11 +1,15 @@
 const express = require ("express")
-const {body , validationResult}=("express-validator")
+const { body , validationResult}=("express-validator")
 const User = require ("../models/user.model")
 
 const router = express.Router()
 
 router.post("/",
-body("email").isEmail().custom(async(value)=>{
+body("email").not()
+.isEmpty()
+.withMessage("Please give email")
+.isEmail()
+.custom(async(value)=>{
 
     const user = await User.findOne({emaile:value});
 
@@ -51,13 +55,10 @@ body("age")
   }),
   async (req, res) => {
     try {
-      console.log(body("firstName"));
       const errors = validationResult(req);
-      console.log({ errors });
       if (!errors.isEmpty()) {
         return res.status(400).send({ errors: errors.array() });
       }
-
       const user = await User.create(req.body);
 
       return res.status(201).send(user);
