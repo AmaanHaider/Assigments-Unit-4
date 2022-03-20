@@ -5,9 +5,7 @@ const User = require ("../models/user.model")
 const router = express.Router()
 
 router.post("/",
-body("email").not()
-.isEmpty()
-.withMessage("Please give email")
+body("email")
 .isEmail()
 .custom(async(value)=>{
 
